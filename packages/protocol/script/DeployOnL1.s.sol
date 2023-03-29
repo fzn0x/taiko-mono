@@ -48,14 +48,6 @@ contract DeployOnL1 is Script, AddressResolver {
         require(l2ChainId != block.chainid, "same chainid");
         require(owner != address(0), "owner is zero");
         require(taikoL2Address != address(0), "taikoL2Address is zero");
-        require(
-            taikoTokenPremintRecipient != address(0),
-            "taikoTokenPremintRecipient is zero"
-        );
-        require(
-            taikoTokenPremintAmount < type(uint64).max,
-            "premint too large"
-        );
 
         vm.startBroadcast(deployerPrivateKey);
 
@@ -74,22 +66,15 @@ contract DeployOnL1 is Script, AddressResolver {
         // TaikoToken
         TaikoToken taikoToken = new TaikoToken();
 
-        address[] memory premintRecipients = new address[](1);
-        uint256[] memory premintAmounts = new uint256[](1);
-        premintRecipients[0] = taikoTokenPremintRecipient;
-        premintAmounts[0] = taikoTokenPremintAmount;
-
         deployProxy(
             "taiko_token",
             address(taikoToken),
             bytes.concat(
                 taikoToken.init.selector,
                 abi.encode(
-                    addressManagerProxy,
-                    "Taiko Token",
-                    "TKO",
-                    premintRecipients,
-                    premintAmounts
+                    "Test Taiko Token",
+                    "TTKO",
+                    addressManagerProxy
                 )
             )
         );
@@ -161,7 +146,7 @@ contract DeployOnL1 is Script, AddressResolver {
             "contracts/libs/yul/PlonkVerifier_80_txs.yulp"
         );
 
-        for (uint16 i = 0; i < plonkVerifiers.length; ++i) {
+        for (uint16 i = 0; i < plonkVerifiers.length; i++) {
             setAddress(
                 string(abi.encodePacked("verifier_", i)),
                 plonkVerifiers[i]
@@ -233,5 +218,15 @@ contract DeployOnL1 is Script, AddressResolver {
                 addr
             );
         }
+    }
+
+    function keyForName(
+        uint256 chainId,
+        string memory name
+    ) public pure returns (string memory key) {
+        key = string.concat(Strings.toString(chainId), ".", name);
+        // TODO: the next line is cheaper in gas but will break
+        //       many Hardhat tests.
+        // key = string(bytes.concat(bytes32(chainId), bytes(name)));
     }
 }
