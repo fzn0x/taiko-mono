@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/taikoxyz/taiko-mono/compare/taiko-mono-v0.9.0...taiko-mono-v0.9.1) (2023-03-30)
+
+
+### Bug Fixes
+
+* **status-page:** add max height and scrollable to prover details popup ([#13498](https://github.com/taikoxyz/taiko-mono/issues/13498)) ([d126791](https://github.com/taikoxyz/taiko-mono/commit/d126791775bbaa59a107975077b9d32811bd09ea))
+
 ## [0.9.0](https://github.com/taikoxyz/taiko-mono/compare/taiko-mono-v0.8.0...taiko-mono-v0.9.0) (2023-03-29)
 
 
